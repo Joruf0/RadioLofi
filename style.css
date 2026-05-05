@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Inconsolata:wght@400;600&display=swap');
+
+:root {
+  --bg:      #1a1814;
+  --surface: #22201a;
+  --border:  #3a3530;
+  --accent:  #c8a96e;
+  --muted:   #7a7060;
+  --text:    #e8e0d0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: 'Inconsolata', monospace;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  font-family: 'Special Elite', cursive;
+  font-size: 20px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+#main { display: flex; flex: 1; overflow: hidden; }
+
+#content {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+  color: var(--text);
+}
+
+#content h2 {
+  font-family: 'Special Elite', cursive;
+  font-size: 26px;
+  color: var(--accent);
+  font-weight: normal;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+#sidebar {
+  width: 190px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 20px 14px;
+}
+
+#sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#sidebar a {
+  text-decoration: none;
+  color: var(--muted);
+  padding: 9px 12px;
+  border-radius: 3px;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  border-left: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+#sidebar a:hover {
+  color: var(--text);
+  border-left-color: var(--border);
+}
+
+#sidebar a.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+
+/* Pàgina Radio */
+body.radio #main {
+  background: url('img/wallpaper1.gif') center center / cover no-repeat;
+}
+
+body.radio #content {
+  background: transparent;
+}
+
+/* ── Player Radio ─────────────────────────── */
+body.radio #content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  padding: 48px 64px;
+}
+
+#player-cover {
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+#player-cover span {
+  font-size: 16px;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 0 30px;
+}
+
+#player-title {
+  font-family: 'Special Elite', cursive;
+  font-size: 32px;
+  letter-spacing: 0.3em;
+  color: #c9b8a0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+
+#player-controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.ctrl-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(168,168,168,0.35);
+  color: #e0d8cc;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, background 0.15s, color 0.15s;
+  backdrop-filter: blur(8px);
+  padding: 0;
+}
+
+.ctrl-btn:hover { transform: scale(1.1); background: rgba(168,168,168,0.5); }
+.ctrl-btn.active { background: rgba(201,185,160,0.75); color: #1a1814; border-color: rgba(201,185,160,0.6); }
+
+#btn-play {
+  width: 88px;
+  height: 88px;
+  font-size: 28px;
+  background: rgba(168,168,168,0.45);
+  padding-left: 4px; /* compensa el triangle visualment */
+}
+
+#btn-play.active {
+  padding-left: 0;
+}
+
+#progress {
+  width: 520px;
+  max-width: 90%;
+  height: 6px;
+  border-radius: 4px;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+#progress::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #c9b8a0;
+  cursor: pointer;
+}
+
+#progress::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #c9b8a0;
+  border: none;
+  cursor: pointer;
+}

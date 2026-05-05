@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Radio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="radio">
+
+  <div id="topbar">Radio</div>
+
+  <div id="main">
+
+    <div id="content">
+
+      <div id="player">
+
+        <!-- Caràtula -->
+        <div id="player-cover">
+          <span>BOYWITHUKE: B SIDES</span>
+        </div>
+
+        <!-- Títol -->
+        <div id="player-title">EXAMPLE &nbsp;-&nbsp; EXAMPLE</div>
+
+        <!-- Controls -->
+        <div id="player-controls">
+          <button class="ctrl-btn" id="btn-shuffle" onclick="toggle(this)" title="Shuffle">&#x21C4;</button>
+          <button class="ctrl-btn" onclick="console.log('prev')" title="Anterior">&#x23EE;</button>
+          <button class="ctrl-btn" id="btn-play" onclick="togglePlay()" title="Play/Pausa">&#x25B6;</button>
+          <button class="ctrl-btn" onclick="console.log('next')" title="Següent">&#x23ED;</button>
+          <button class="ctrl-btn" id="btn-repeat" onclick="toggle(this)" title="Repetir">&#x21BA;</button>
+        </div>
+
+        <!-- Barra de progrés -->
+        <input id="progress" type="range" min="0" max="100" value="40" oninput="updateProgress(this)" />
+
+      </div>
+
+    </div>
+
+    <div id="sidebar">
+      <nav>
+        <a href="index.html">Index</a>
+        <a href="main.html" class="active">Radio</a>
+        <a href="contact.html">Contactens</a>
+        <a href="about.html">Sobre Nosaltres</a>
+      </nav>
+    </div>
+
+  </div>
+
+  <script>
+    function togglePlay() {
+      var btn = document.getElementById('btn-play');
+      btn.classList.toggle('active');
+      btn.innerHTML = btn.classList.contains('active') ? '&#x23F8;' : '&#x25B6;';
+    }
+    function toggle(btn) {
+      btn.classList.toggle('active');
+    }
+    function updateProgress(input) {
+      var v = input.value;
+      input.style.background = 'linear-gradient(to right, #525252 ' + v + '%, rgba(255,255,255,0.3) ' + v + '%)';
+    }
+    // init progress bar
+    updateProgress(document.getElementById('progress'));
+  </script>
+
+</body>
+</html>
