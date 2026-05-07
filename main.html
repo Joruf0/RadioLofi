@@ -15,25 +15,21 @@
 
       <div id="player">
 
-        <!-- Caràtula -->
         <div id="player-cover">
-          <span>BOYWITHUKE: B SIDES</span>
+          <span></span>
         </div>
 
-        <!-- Títol -->
-        <div id="player-title">EXAMPLE &nbsp;-&nbsp; EXAMPLE</div>
+        <div id="player-title"></div>
 
-        <!-- Controls -->
         <div id="player-controls">
-          <button class="ctrl-btn" id="btn-shuffle" onclick="toggle(this)" title="Shuffle">&#x21C4;</button>
-          <button class="ctrl-btn" onclick="console.log('prev')" title="Anterior">&#x23EE;</button>
+          <button class="ctrl-btn" id="btn-shuffle" onclick="toggleShuffle()" title="Shuffle">&#x21C4;</button>
+          <button class="ctrl-btn" onclick="prevSong()" title="Anterior">&#x23EE;</button>
           <button class="ctrl-btn" id="btn-play" onclick="togglePlay()" title="Play/Pausa">&#x25B6;</button>
-          <button class="ctrl-btn" onclick="console.log('next')" title="Següent">&#x23ED;</button>
-          <button class="ctrl-btn" id="btn-repeat" onclick="toggle(this)" title="Repetir">&#x21BA;</button>
+          <button class="ctrl-btn" onclick="nextSong()" title="Següent">&#x23ED;</button>
+          <button class="ctrl-btn" id="btn-repeat" onclick="repeatSong()" title="Repetir">&#x21BA;</button>
         </div>
 
-        <!-- Barra de progrés -->
-        <input id="progress" type="range" min="0" max="100" value="40" oninput="updateProgress(this)" />
+        <input id="progress" type="range" min="0" max="100" value="0" oninput="seek(this)" />
 
       </div>
 
@@ -50,21 +46,164 @@
 
   </div>
 
+  <audio id="audio" preload="auto"></audio>
+
   <script>
+    // ── Playlist ── afegeix aquí les teves cançons
+    var playlist = [
+      {
+        src:      "mp3/Hopeless_Romantic.mp3",
+        title:    "Hopeless Romantic",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Overthinking.mp3",
+        title:    "Overthinking",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Affection.mp3",
+        title:    "Affection",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Cant_Let_You_Go.mp3",
+        title:    "Can't Let You Go",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Dear_Hollywood.mp3",
+        title:    "Dear Hollywood",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Enigma.mp3",
+        title:    "Enigma",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Next_Best_Thing.mp3",
+        title:    "Next Best Thing",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Runaway.mp3",
+        title:    "Runaway",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/Terrified.mp3",
+        title:    "Terrified",
+        label:    "BOYWITHUKE: B SIDES",
+        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
+      },
+      {
+        src:      "mp3/propose.mp3",
+        title:    "Propose",
+        label:    "Natori",
+        gradient: "linear-gradient(135deg, rgba(255,255,255,0.85), rgba(140,140,140,0.85))"
+      }
+      // { src: "mp3/nova_canco.mp3", title: "Títol", label: "ARTISTA", gradient: "linear-gradient(...)" },
+    ];
+
+    var current  = 0;
+    var audio    = document.getElementById('audio');
+    var progress = document.getElementById('progress');
+    var btnPlay  = document.getElementById('btn-play');
+    var titleEl  = document.getElementById('player-title');
+    var coverEl  = document.getElementById('player-cover');
+
+    function loadSong(index, autoplay) {
+      current = index;
+      var song = playlist[index];
+      audio.src = song.src;
+      titleEl.textContent = song.title;
+      coverEl.querySelector('span').textContent = song.label;
+      coverEl.style.background = song.gradient;
+      progress.value = 0;
+      paintProgress(0);
+      if (autoplay) {
+        audio.play();
+        setPlayIcon(true);
+      } else {
+        setPlayIcon(false);
+      }
+    }
+
+    function paintProgress(v) {
+      progress.style.background =
+        'linear-gradient(to right, #c9b8a0 ' + v + '%, rgba(255,255,255,0.25) ' + v + '%)';
+    }
+
+    function setPlayIcon(playing) {
+      btnPlay.innerHTML = playing ? '&#x23F8;' : '&#x25B6;';
+    }
+
+    loadSong(0, false);
+
+    audio.addEventListener('timeupdate', function () {
+      if (audio.duration && isFinite(audio.duration)) {
+        var pct = (audio.currentTime / audio.duration) * 100;
+        progress.value = pct;
+        paintProgress(pct);
+      }
+    });
+
+    audio.addEventListener('ended', function () {
+      nextSong();
+    });
+
     function togglePlay() {
-      var btn = document.getElementById('btn-play');
-      btn.classList.toggle('active');
-      btn.innerHTML = btn.classList.contains('active') ? '&#x23F8;' : '&#x25B6;';
+      if (audio.paused) {
+        audio.play();
+        setPlayIcon(true);
+      } else {
+        audio.pause();
+        setPlayIcon(false);
+      }
     }
-    function toggle(btn) {
-      btn.classList.toggle('active');
+
+    function nextSong() {
+      var next = (current + 1) % playlist.length;
+      loadSong(next, true);
     }
-    function updateProgress(input) {
-      var v = input.value;
-      input.style.background = 'linear-gradient(to right, #525252 ' + v + '%, rgba(255,255,255,0.3) ' + v + '%)';
+
+    function prevSong() {
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
+      } else {
+        var prev = (current - 1 + playlist.length) % playlist.length;
+        loadSong(prev, !audio.paused);
+      }
     }
-    // init progress bar
-    updateProgress(document.getElementById('progress'));
+
+    function seek(input) {
+      if (audio.duration && isFinite(audio.duration)) {
+        audio.currentTime = (input.value / 100) * audio.duration;
+        paintProgress(input.value);
+      }
+    }
+
+    function repeatSong() {
+      audio.currentTime = 0;
+      audio.play();
+      setPlayIcon(true);
+      var btn = document.getElementById('btn-repeat');
+      btn.classList.add('active');
+      setTimeout(function () { btn.classList.remove('active'); }, 400);
+    }
+
+    function toggleShuffle() {
+      document.getElementById('btn-shuffle').classList.toggle('active');
+    }
   </script>
 
 </body>
