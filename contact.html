@@ -2,34 +2,36 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contactens</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="img/logo.png" />
 </head>
-<body>
-  <div id="topbar">RadioLofi</div>
-  <div id="main">
+<body itemscope itemtype="http://schema.org/ContactPage">
+  <div id="topbar" itemprop="headline"><img id="topbar-logo" src="img/logo.png" alt="RadioLofi logo" />RadioLofi</div>
+  <div id="main" itemprop="mainContentOfPage">
     <div id="content">
-      <h2>Contactens:</h2>
+      <h2 itemprop="headline">Contactens:</h2>
 
       <p class="contact-intro">
         Tens alguna suggèrencia, pregunta o simplement vols dir hola? Omple el formulari i t'intentarem respondre el més aviat possible.
       </p>
 
-      <form class="contact-form" action="contact.html" method="get">
+      <form class="contact-form" action="contact.html" method="get" itemprop="mainEntity" itemscope itemtype="http://schema.org/ContactPoint">
 
         <div class="form-group">
           <label for="nom">Nom</label>
-          <input type="text" id="nom" name="nom" placeholder="El teu nom..." required />
+          <input type="text" id="nom" name="nom" placeholder="El teu nom..." required itemprop="name" />
         </div>
 
         <div class="form-group">
           <label for="correu">Correu electrònic</label>
-          <input type="email" id="correu" name="correu" placeholder="exemple@correu.com" required />
+          <input type="email" id="correu" name="correu" placeholder="exemple@correu.com" required itemprop="email" />
         </div>
 
         <div class="form-group">
           <label for="missatge">Missatge</label>
-          <textarea id="missatge" name="missatge" rows="6" placeholder="Escriu aquí el teu missatge..." required></textarea>
+          <textarea id="missatge" name="missatge" rows="6" placeholder="Escriu aquí el teu missatge..." required itemprop="description"></textarea>
         </div>
 
         <button type="submit" class="form-btn">Enviar missatge</button>
