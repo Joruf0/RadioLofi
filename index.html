@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="img/logo.png" />
 </head>
-<body>
-  <div id="topbar">RadioLofi</div>
-  <div id="main">
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="topbar" itemprop="headline"><img id="topbar-logo" src="img/logo.png" alt="RadioLofi logo" />RadioLofi</div>
+  <div id="main" itemprop="mainContentOfPage">
     <div id="content">
       <h2>Llistat de cançons:</h2>
 
-      <table class="song-list">
+      <div id="drop-zone">
+        <span>🎵</span>
+        Arrossega aquí els teus fitxers <strong>.mp3</strong> per afegir-los a la llista
+      </div>
+
+      <table class="song-list" itemscope itemtype="http://schema.org/MusicPlaylist" itemprop="mainEntity">
         <thead>
           <tr>
             <th>#</th>
@@ -20,96 +29,6 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="song-row" onclick="playSong(0)">
-            <td class="song-num">1</td>
-            <td class="song-title">Hopeless Romantic</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(1)">
-            <td class="song-num">2</td>
-            <td class="song-title">Overthinking</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(2)">
-            <td class="song-num">3</td>
-            <td class="song-title">Affection</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(3)">
-            <td class="song-num">4</td>
-            <td class="song-title">Can't Let You Go</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(4)">
-            <td class="song-num">5</td>
-            <td class="song-title">Dear Hollywood</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(5)">
-            <td class="song-num">6</td>
-            <td class="song-title">Enigma</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(6)">
-            <td class="song-num">7</td>
-            <td class="song-title">Next Best Thing</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(7)">
-            <td class="song-num">8</td>
-            <td class="song-title">Runaway</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(8)">
-            <td class="song-num">9</td>
-            <td class="song-title">Terrified</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(9)">
-            <td class="song-num">10</td>
-            <td class="song-title">Impostor Syndrome</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(10)">
-            <td class="song-num">11</td>
-            <td class="song-title">Jane</td>
-            <td class="song-artist">BOYWITHUKE</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(11)">
-            <td class="song-num">12</td>
-            <td class="song-title">Propose</td>
-            <td class="song-artist">Natori</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(12)">
-            <td class="song-num">13</td>
-            <td class="song-title">The Glue Song</td>
-            <td class="song-artist">Beabadoobee</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(13)">
-            <td class="song-num">14</td>
-            <td class="song-title">Real Man</td>
-            <td class="song-artist">Beabadoobee</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(14)">
-            <td class="song-num">15</td>
-            <td class="song-title">Mockingbird</td>
-            <td class="song-artist">Eminem</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(15)">
-            <td class="song-num">16</td>
-            <td class="song-title">Stan</td>
-            <td class="song-artist">Eminem</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(16)">
-            <td class="song-num">17</td>
-            <td class="song-title">From The Start</td>
-            <td class="song-artist">Laufey</td>
-          </tr>
-          <tr class="song-row" onclick="playSong(17)">
-            <td class="song-num">18</td>
-            <td class="song-title">Mirrors (Demo)</td>
-            <td class="song-artist">Overtonight</td>
-          </tr>
         </tbody>
       </table>
 
@@ -125,11 +44,143 @@
   </div>
 
   <script>
+    var playlist = [
+      { src: "mp3/Hopeless_Romantic.mp3", title: "Hopeless Romantic", label: "BOYWITHUKE" },
+      { src: "mp3/Overthinking.mp3", title: "Overthinking", label: "BOYWITHUKE" },
+      { src: "mp3/Affection.mp3", title: "Affection", label: "BOYWITHUKE" },
+      { src: "mp3/Cant_Let_You_Go.mp3", title: "Can't Let You Go", label: "BOYWITHUKE" },
+      { src: "mp3/Dear_Hollywood.mp3", title: "Dear Hollywood", label: "BOYWITHUKE" },
+      { src: "mp3/Enigma.mp3", title: "Enigma", label: "BOYWITHUKE" },
+      { src: "mp3/Next_Best_Thing.mp3", title: "Next Best Thing", label: "BOYWITHUKE" },
+      { src: "mp3/Runaway.mp3", title: "Runaway", label: "BOYWITHUKE" },
+      { src: "mp3/Terrified.mp3", title: "Terrified", label: "BOYWITHUKE" },
+      { src: "mp3/Impostor_Syndrome.mp3", title: "Impostor Syndrome", label: "Sidney Gish" },
+      { src: "mp3/Jane.mp3", title: "Jane", label: "The Long Faces" },
+      { src: "mp3/propose.mp3", title: "Propose", label: "Natori" },
+      { src: "mp3/beabadoobee_Glue_Song.mp3", title: "The Glue Song", label: "Beabadoobee" },
+      { src: "mp3/beabadoobee_Real_Man.mp3", title: "Real Man", label: "Beabadoobee" },
+      { src: "mp3/Eminem_Mockingbird.mp3", title: "Mockingbird", label: "Eminem" },
+      { src: "mp3/Eminem_Stan.mp3", title: "Stan", label: "Eminem" },
+      { src: "mp3/Laufey_From_The_Start.mp3", title: "From The Start", label: "Laufey" },
+      { src: "mp3/overtonight_mirrors_demo.mp3", title: "Mirrors (Demo)", label: "Overtonight" },
+    ];
+
+    var userSongs = JSON.parse(sessionStorage.getItem('userSongs') || '[]');
+
+    function openSongDB() {
+      return new Promise(function (resolve, reject) {
+        var request = window.indexedDB.open('RadioLofiSongs', 1);
+        request.onupgradeneeded = function (event) {
+          var db = event.target.result;
+          if (!db.objectStoreNames.contains('songs')) {
+            db.createObjectStore('songs');
+          }
+        };
+        request.onsuccess = function (event) {
+          resolve(event.target.result);
+        };
+        request.onerror = function (event) {
+          reject(event.target.error);
+        };
+      });
+    }
+
+    function saveSongBlob(key, blob) {
+      return openSongDB().then(function (db) {
+        return new Promise(function (resolve, reject) {
+          var tx = db.transaction('songs', 'readwrite');
+          var store = tx.objectStore('songs');
+          var request = store.put(blob, key);
+          request.onsuccess = resolve;
+          request.onerror = function (event) { reject(event.target.error); };
+        });
+      });
+    }
+
+    function saveUserSongs() {
+      var toSave = userSongs.map(function (s) {
+        return { title: s.title, label: s.label, src: s.src, isBlob: s.isBlob };
+      });
+      sessionStorage.setItem('userSongs', JSON.stringify(toSave));
+    }
+
+    function renderTable() {
+      var tbody = document.querySelector('.song-list tbody');
+      tbody.innerHTML = '';
+      var all = playlist.concat(userSongs);
+      all.forEach(function (song, i) {
+        var tr = document.createElement('tr');
+        tr.className = 'song-row';
+        tr.setAttribute('itemscope', '');
+        tr.setAttribute('itemtype', 'http://schema.org/MusicRecording');
+        tr.setAttribute('itemprop', 'track');
+        tr.onclick = function () { playSong(i); };
+        tr.innerHTML =
+          '<td class="song-num">' + (i + 1) + '</td>' +
+          '<td class="song-title" itemprop="name">' + song.title + '</td>' +
+          '<td class="song-artist" itemprop="byArtist" itemscope itemtype="http://schema.org/MusicGroup"><span itemprop="name">' + song.label + '</span></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
     function playSong(index) {
       localStorage.setItem('startSong', index);
       window.location.href = 'main.html';
     }
+
+    var dropZone = document.getElementById('drop-zone');
+
+    dropZone.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', function () {
+      dropZone.classList.remove('drag-over');
+    });
+    dropZone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      var files = Array.from(e.dataTransfer.files).filter(function (f) {
+        return f.type === 'audio/mpeg' || f.name.endsWith('.mp3');
+      });
+      if (files.length === 0) return;
+      files.forEach(function (file) {
+        var key = 'song_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        saveSongBlob(key, file).then(function () {
+          var title = file.name.replace(/\.mp3$/i, '').replace(/_/g, ' ');
+          userSongs.push({ src: key, title: title, label: 'Tu', isBlob: true });
+          saveUserSongs();
+          renderTable();
+        }).catch(function () {
+          alert('No s\'ha pogut desar la cançó. Prova un fitxer més petit o un altre navegador.');
+        });
+      });
+    });
+
+    dropZone.addEventListener('click', function () {
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.mp3,audio/mpeg';
+      input.multiple = true;
+      input.onchange = function () {
+        Array.from(input.files).forEach(function (file) {
+          var key = 'song_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          saveSongBlob(key, file).then(function () {
+            var title = file.name.replace(/\.mp3$/i, '').replace(/_/g, ' ');
+            userSongs.push({ src: key, title: title, label: 'Tu', isBlob: true });
+            saveUserSongs();
+            renderTable();
+          }).catch(function () {
+            alert('No s\'ha pogut desar la cançó. Prova un fitxer més petit o un altre navegador.');
+          });
+        });
+      };
+      input.click();
+    });
+
+    renderTable();
   </script>
 
 </body>
+
 </html>

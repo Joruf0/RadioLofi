@@ -2,24 +2,26 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Radio</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="img/logo.png" />
 </head>
-<body class="radio">
+<body class="radio" itemscope itemtype="http://schema.org/WebPage">
 
-  <div id="topbar">RadioLofi</div>
+  <div id="topbar"><img id="topbar-logo" src="img/logo.png" alt="RadioLofi logo" />RadioLofi</div>
 
-  <div id="main">
+  <div id="main" itemprop="mainContentOfPage">
 
     <div id="content">
 
-      <div id="player">
+      <div id="player" itemprop="mainEntity" itemscope itemtype="http://schema.org/MusicPlaylist">
 
-        <div id="player-cover">
+        <div id="player-cover" itemprop="image">
           <span></span>
         </div>
 
-        <div id="player-title"></div>
+        <div id="player-title" itemprop="name"></div>
 
         <div id="player-controls">
           <button class="ctrl-btn" id="btn-shuffle" onclick="toggleShuffle()" title="Shuffle">&#x21C4;</button>
@@ -32,7 +34,7 @@
         <input id="progress" type="range" min="0" max="100" value="0" oninput="seek(this)" />
 
         <div id="volume-control">
-          <span id="volume-icon">&#x1F50A;</span>
+          <span id="volume-icon">&#x25B2;&#x25B2;&#x25B2;</span>
           <input id="volume" type="range" min="0" max="100" value="80" oninput="setVolume(this)" />
         </div>
 
@@ -83,8 +85,8 @@
       { src: "mp3/Next_Best_Thing.mp3",          title: "Next Best Thing",     label: "BOYWITHUKE"  },
       { src: "mp3/Runaway.mp3",                  title: "Runaway",             label: "BOYWITHUKE"  },
       { src: "mp3/Terrified.mp3",                title: "Terrified",           label: "BOYWITHUKE"  },
-      { src: "mp3/Impostor_Syndrome.mp3",        title: "Impostor Syndrome",   label: "BOYWITHUKE"  },
-      { src: "mp3/Jane.mp3",                     title: "Jane",                label: "BOYWITHUKE"  },
+      { src: "mp3/Impostor_Syndrome.mp3",        title: "Impostor Syndrome",   label: "Sidney Gish "  },
+      { src: "mp3/Jane.mp3",                     title: "Jane",                label: "The Long Faces"  },
       { src: "mp3/propose.mp3",                  title: "Propose",             label: "Natori"      },
       { src: "mp3/beabadoobee_Glue_Song.mp3",    title: "The Glue Song",       label: "Beabadoobee" },
       { src: "mp3/beabadoobee_Real_Man.mp3",     title: "Real Man",            label: "Beabadoobee" },
@@ -94,6 +96,58 @@
       { src: "mp3/overtonight_mirrors_demo.mp3", title: "Mirrors (Demo)",      label: "Overtonight" },
       // { src: "mp3/nova_canco.mp3", title: "Títol", label: "ARTISTA" },
     ].map(function(s) { s.gradient = gradientForArtist(s.label); return s; });
+
+    var userSongs = JSON.parse(sessionStorage.getItem('userSongs') || '[]');
+
+    function openSongDB() {
+      return new Promise(function (resolve, reject) {
+        var request = window.indexedDB.open('RadioLofiSongs', 1);
+        request.onupgradeneeded = function (event) {
+          var db = event.target.result;
+          if (!db.objectStoreNames.contains('songs')) {
+            db.createObjectStore('songs');
+          }
+        };
+        request.onsuccess = function (event) {
+          resolve(event.target.result);
+        };
+        request.onerror = function (event) {
+          reject(event.target.error);
+        };
+      });
+    }
+
+    function getSongBlob(key) {
+      return openSongDB().then(function (db) {
+        return new Promise(function (resolve, reject) {
+          var tx = db.transaction('songs', 'readonly');
+          var store = tx.objectStore('songs');
+          var request = store.get(key);
+          request.onsuccess = function () { resolve(request.result); };
+          request.onerror = function (event) { reject(event.target.error); };
+        });
+      });
+    }
+
+    function restoreSong(song) {
+      if (!song || !song.src || song.src.indexOf('mp3/') === 0 || song.src.indexOf('blob:') === 0) {
+        return Promise.resolve(song);
+      }
+      return getSongBlob(song.src).then(function (blob) {
+        if (blob) {
+          song.src = URL.createObjectURL(blob);
+        }
+        return song;
+      }).catch(function () {
+        return song;
+      });
+    }
+
+    function initPlaylist() {
+      return Promise.all(userSongs.map(restoreSong)).then(function (restored) {
+        playlist = playlist.concat(restored.map(function(s) { s.gradient = gradientForArtist(s.label); return s; }));
+      });
+    }
 
     var current  = 0;
     var audio    = document.getElementById('audio');
@@ -112,8 +166,16 @@
       progress.value = 0;
       paintProgress(0);
       if (autoplay) {
-        audio.play();
-        setPlayIcon(true);
+        var playPromise = audio.play();
+        if (playPromise && playPromise.catch) {
+          playPromise.then(function () {
+            setPlayIcon(true);
+          }).catch(function () {
+            setPlayIcon(false);
+          });
+        } else {
+          setPlayIcon(true);
+        }
       } else {
         setPlayIcon(false);
       }
@@ -128,22 +190,28 @@
       btnPlay.innerHTML = playing ? '&#x23F8;' : '&#x25B6;';
     }
 
-    var startIndex = parseInt(localStorage.getItem('startSong'));
-    localStorage.removeItem('startSong');
-    loadSong(isNaN(startIndex) ? 0 : startIndex, !isNaN(startIndex));
+    function initPlayer() {
+      var startIndex = parseInt(localStorage.getItem('startSong'));
+      localStorage.removeItem('startSong');
+      loadSong(isNaN(startIndex) ? 0 : startIndex, !isNaN(startIndex));
 
-    audio.volume = 0.8;
+      audio.volume = 0.8;
 
-    audio.addEventListener('timeupdate', function () {
-      if (audio.duration && isFinite(audio.duration)) {
-        var pct = (audio.currentTime / audio.duration) * 100;
-        progress.value = pct;
-        paintProgress(pct);
-      }
-    });
+      audio.addEventListener('timeupdate', function () {
+        if (audio.duration && isFinite(audio.duration)) {
+          var pct = (audio.currentTime / audio.duration) * 100;
+          progress.value = pct;
+          paintProgress(pct);
+        }
+      });
 
-    audio.addEventListener('ended', function () {
-      nextSong();
+      audio.addEventListener('ended', function () {
+        nextSong();
+      });
+    }
+
+    initPlaylist().then(initPlayer).catch(function () {
+      initPlayer();
     });
 
     function togglePlay() {
@@ -195,10 +263,10 @@
       var v = input.value / 100;
       audio.volume = v;
       var icon = document.getElementById('volume-icon');
-      if (v === 0)       icon.innerHTML = '&#x1F507;';
-      else if (v < 0.4)  icon.innerHTML = '&#x1F508;';
-      else if (v < 0.7)  icon.innerHTML = '&#x1F509;';
-      else               icon.innerHTML = '&#x1F50A;';
+      if (v === 0)       icon.innerHTML = '&#x2715;';
+      else if (v < 0.4)  icon.innerHTML = '&#x25B2;';
+      else if (v < 0.7)  icon.innerHTML = '&#x25B2;&#x25B2;';
+      else               icon.innerHTML = '&#x25B2;&#x25B2;&#x25B2;';
       paintVolume(input.value);
     }
 
