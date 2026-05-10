@@ -7,7 +7,7 @@
 </head>
 <body class="radio">
 
-  <div id="topbar">Radio</div>
+  <div id="topbar">RadioLofi</div>
 
   <div id="main">
 
@@ -31,6 +31,11 @@
 
         <input id="progress" type="range" min="0" max="100" value="0" oninput="seek(this)" />
 
+        <div id="volume-control">
+          <span id="volume-icon">&#x1F50A;</span>
+          <input id="volume" type="range" min="0" max="100" value="80" oninput="setVolume(this)" />
+        </div>
+
       </div>
 
     </div>
@@ -49,70 +54,46 @@
   <audio id="audio" preload="auto"></audio>
 
   <script>
+    // ── Gradient per artista ──
+    function randomGradient() {
+      function rc() { return Math.floor(Math.random() * 200 + 55); }
+      var angle = Math.floor(Math.random() * 360);
+      var c1 = 'rgba('+rc()+','+rc()+','+rc()+',0.75)';
+      var c2 = 'rgba('+rc()+','+rc()+','+rc()+',0.75)';
+      var c3 = 'rgba('+rc()+','+rc()+','+rc()+',0.75)';
+      return 'linear-gradient('+angle+'deg, '+c1+', '+c2+', '+c3+')';
+    }
+
+    var artistGradients = {};
+    function gradientForArtist(label) {
+      if (!artistGradients[label]) {
+        artistGradients[label] = randomGradient();
+      }
+      return artistGradients[label];
+    }
+
     // ── Playlist ── afegeix aquí les teves cançons
     var playlist = [
-      {
-        src:      "mp3/Hopeless_Romantic.mp3",
-        title:    "Hopeless Romantic",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Overthinking.mp3",
-        title:    "Overthinking",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Affection.mp3",
-        title:    "Affection",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Cant_Let_You_Go.mp3",
-        title:    "Can't Let You Go",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Dear_Hollywood.mp3",
-        title:    "Dear Hollywood",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Enigma.mp3",
-        title:    "Enigma",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Next_Best_Thing.mp3",
-        title:    "Next Best Thing",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Runaway.mp3",
-        title:    "Runaway",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/Terrified.mp3",
-        title:    "Terrified",
-        label:    "BOYWITHUKE: B SIDES",
-        gradient: "linear-gradient(135deg, rgba(168,200,232,0.7), rgba(232,180,200,0.7), rgba(168,216,192,0.7))"
-      },
-      {
-        src:      "mp3/propose.mp3",
-        title:    "Propose",
-        label:    "Natori",
-        gradient: "linear-gradient(135deg, rgba(255,255,255,0.85), rgba(140,140,140,0.85))"
-      }
-      // { src: "mp3/nova_canco.mp3", title: "Títol", label: "ARTISTA", gradient: "linear-gradient(...)" },
-    ];
+      { src: "mp3/Hopeless_Romantic.mp3",       title: "Hopeless Romantic",   label: "BOYWITHUKE"  },
+      { src: "mp3/Overthinking.mp3",             title: "Overthinking",        label: "BOYWITHUKE"  },
+      { src: "mp3/Affection.mp3",                title: "Affection",           label: "BOYWITHUKE"  },
+      { src: "mp3/Cant_Let_You_Go.mp3",          title: "Can't Let You Go",    label: "BOYWITHUKE"  },
+      { src: "mp3/Dear_Hollywood.mp3",           title: "Dear Hollywood",      label: "BOYWITHUKE"  },
+      { src: "mp3/Enigma.mp3",                   title: "Enigma",              label: "BOYWITHUKE"  },
+      { src: "mp3/Next_Best_Thing.mp3",          title: "Next Best Thing",     label: "BOYWITHUKE"  },
+      { src: "mp3/Runaway.mp3",                  title: "Runaway",             label: "BOYWITHUKE"  },
+      { src: "mp3/Terrified.mp3",                title: "Terrified",           label: "BOYWITHUKE"  },
+      { src: "mp3/Impostor_Syndrome.mp3",        title: "Impostor Syndrome",   label: "BOYWITHUKE"  },
+      { src: "mp3/Jane.mp3",                     title: "Jane",                label: "BOYWITHUKE"  },
+      { src: "mp3/propose.mp3",                  title: "Propose",             label: "Natori"      },
+      { src: "mp3/beabadoobee_Glue_Song.mp3",    title: "The Glue Song",       label: "Beabadoobee" },
+      { src: "mp3/beabadoobee_Real_Man.mp3",     title: "Real Man",            label: "Beabadoobee" },
+      { src: "mp3/Eminem_Mockingbird.mp3",       title: "Mockingbird",         label: "Eminem"      },
+      { src: "mp3/Eminem_Stan.mp3",              title: "Stan",                label: "Eminem"      },
+      { src: "mp3/Laufey_From_The_Start.mp3",    title: "From The Start",      label: "Laufey"      },
+      { src: "mp3/overtonight_mirrors_demo.mp3", title: "Mirrors (Demo)",      label: "Overtonight" },
+      // { src: "mp3/nova_canco.mp3", title: "Títol", label: "ARTISTA" },
+    ].map(function(s) { s.gradient = gradientForArtist(s.label); return s; });
 
     var current  = 0;
     var audio    = document.getElementById('audio');
@@ -147,7 +128,11 @@
       btnPlay.innerHTML = playing ? '&#x23F8;' : '&#x25B6;';
     }
 
-    loadSong(0, false);
+    var startIndex = parseInt(localStorage.getItem('startSong'));
+    localStorage.removeItem('startSong');
+    loadSong(isNaN(startIndex) ? 0 : startIndex, !isNaN(startIndex));
+
+    audio.volume = 0.8;
 
     audio.addEventListener('timeupdate', function () {
       if (audio.duration && isFinite(audio.duration)) {
@@ -172,7 +157,12 @@
     }
 
     function nextSong() {
-      var next = (current + 1) % playlist.length;
+      var next;
+      if (document.getElementById('btn-shuffle').classList.contains('active')) {
+        next = Math.floor(Math.random() * playlist.length);
+      } else {
+        next = (current + 1) % playlist.length;
+      }
       loadSong(next, true);
     }
 
@@ -200,6 +190,24 @@
       btn.classList.add('active');
       setTimeout(function () { btn.classList.remove('active'); }, 400);
     }
+
+    function setVolume(input) {
+      var v = input.value / 100;
+      audio.volume = v;
+      var icon = document.getElementById('volume-icon');
+      if (v === 0)       icon.innerHTML = '&#x1F507;';
+      else if (v < 0.4)  icon.innerHTML = '&#x1F508;';
+      else if (v < 0.7)  icon.innerHTML = '&#x1F509;';
+      else               icon.innerHTML = '&#x1F50A;';
+      paintVolume(input.value);
+    }
+
+    function paintVolume(v) {
+      document.getElementById('volume').style.background =
+        'linear-gradient(to right, #c9b8a0 ' + v + '%, rgba(255,255,255,0.25) ' + v + '%)';
+    }
+
+    paintVolume(80);
 
     function toggleShuffle() {
       document.getElementById('btn-shuffle').classList.toggle('active');

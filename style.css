@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Inconsolata:wght@400;600&display=swap');
-
 :root {
   --bg:      #1a1814;
   --surface: #22201a;
@@ -8,9 +7,7 @@
   --muted:   #7a7060;
   --text:    #e8e0d0;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   display: flex;
   flex-direction: column;
@@ -19,7 +16,6 @@ body {
   background: var(--bg);
   color: var(--text);
 }
-
 #topbar {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -28,17 +24,15 @@ body {
   font-size: 20px;
   color: var(--accent);
   letter-spacing: 0.05em;
+  flex-shrink: 0;
 }
-
 #main { display: flex; flex: 1; overflow: hidden; }
-
 #content {
   flex: 1;
   padding: 32px;
   overflow-y: auto;
   color: var(--text);
 }
-
 #content h2 {
   font-family: 'Special Elite', cursive;
   font-size: 26px;
@@ -48,20 +42,18 @@ body {
   padding-bottom: 12px;
   margin-bottom: 20px;
 }
-
 #sidebar {
   width: 190px;
   background: var(--surface);
   border-left: 1px solid var(--border);
   padding: 20px 14px;
+  flex-shrink: 0;
 }
-
 #sidebar nav {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
 #sidebar a {
   text-decoration: none;
   color: var(--muted);
@@ -72,33 +64,27 @@ body {
   border-left: 2px solid transparent;
   transition: color 0.2s, border-color 0.2s;
 }
-
 #sidebar a:hover {
   color: var(--text);
   border-left-color: var(--border);
 }
-
 #sidebar a.active {
   color: var(--accent);
   border-left-color: var(--accent);
 }
-
 /* Pàgina Radio */
 body.radio #main {
   background: url('img/wallpaper1.gif') center center / cover no-repeat;
 }
-
 body.radio #content {
   background: transparent;
 }
-
 /* ── Player Radio ─────────────────────────── */
 body.radio #content {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 #player {
   display: flex;
   flex-direction: column;
@@ -106,7 +92,6 @@ body.radio #content {
   gap: 36px;
   padding: 48px 64px;
 }
-
 #player-cover {
   width: 340px;
   height: 340px;
@@ -118,7 +103,6 @@ body.radio #content {
   box-shadow: 0 12px 48px rgba(0,0,0,0.5);
   border: 1px solid rgba(255,255,255,0.15);
 }
-
 #player-cover span {
   font-size: 16px;
   color: rgba(255,255,255,0.85);
@@ -126,7 +110,6 @@ body.radio #content {
   text-align: center;
   padding: 0 30px;
 }
-
 #player-title {
   font-family: 'Special Elite', cursive;
   font-size: 32px;
@@ -134,13 +117,11 @@ body.radio #content {
   color: #c9b8a0;
   text-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
-
 #player-controls {
   display: flex;
   align-items: center;
   gap: 18px;
 }
-
 .ctrl-btn {
   width: 72px;
   height: 72px;
@@ -158,22 +139,18 @@ body.radio #content {
   backdrop-filter: blur(8px);
   padding: 0;
 }
-
 .ctrl-btn:hover { transform: scale(1.1); background: rgba(168,168,168,0.5); }
 .ctrl-btn.active { background: rgba(201,185,160,0.75); color: #1a1814; border-color: rgba(201,185,160,0.6); }
-
 #btn-play {
   width: 88px;
   height: 88px;
   font-size: 28px;
   background: rgba(168,168,168,0.45);
-  padding-left: 4px; /* compensa el triangle visualment */
+  padding-left: 4px;
 }
-
 #btn-play.active {
   padding-left: 0;
 }
-
 #progress {
   width: 520px;
   max-width: 90%;
@@ -184,7 +161,6 @@ body.radio #content {
   outline: none;
   border: none;
 }
-
 #progress::-webkit-slider-thumb {
   appearance: none;
   width: 16px;
@@ -193,7 +169,6 @@ body.radio #content {
   background: #c9b8a0;
   cursor: pointer;
 }
-
 #progress::-moz-range-thumb {
   width: 16px;
   height: 16px;
@@ -201,4 +176,204 @@ body.radio #content {
   background: #c9b8a0;
   border: none;
   cursor: pointer;
+}
+
+/* ── Volum ─────────────────────────── */
+#volume-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#volume-icon {
+  font-size: 18px;
+  cursor: default;
+  user-select: none;
+}
+#volume {
+  width: 120px;
+  height: 6px;
+  border-radius: 4px;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+#volume::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #c9b8a0;
+  cursor: pointer;
+}
+#volume::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #c9b8a0;
+  border: none;
+  cursor: pointer;
+}
+
+/* ── Pàgina About ─────────────────────────── */
+#content p {
+  line-height: 1.8;
+  font-size: 15px;
+  margin-bottom: 16px;
+  max-width: 680px;
+}
+#content p:last-child {
+  margin-bottom: 0;
+}
+.highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+.about-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  max-width: 680px;
+}
+.about-block h3 {
+  font-family: 'Special Elite', cursive;
+  font-size: 16px;
+  color: var(--accent);
+  font-weight: normal;
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+.about-block p {
+  margin-bottom: 0;
+}
+
+/* ── Pàgina Contact ─────────────────────────── */
+.contact-intro {
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 520px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group label {
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+}
+.form-group input,
+.form-group textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-family: 'Inconsolata', monospace;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--muted);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+}
+.form-btn {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: 'Inconsolata', monospace;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  padding: 10px 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.form-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ── Pàgina Index / Llistat de cançons ─────── */
+#drop-zone {
+  max-width: 680px;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-bottom: 28px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+#drop-zone.drag-over {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(200, 169, 110, 0.05);
+}
+#drop-zone span {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.song-list {
+  width: 100%;
+  max-width: 680px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.song-list thead tr {
+  border-bottom: 1px solid var(--border);
+}
+.song-list th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  font-weight: normal;
+}
+.song-row {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.song-row:hover {
+  background: var(--surface);
+}
+.song-row:hover .song-num {
+  color: var(--accent);
+}
+.song-num {
+  padding: 12px 12px;
+  color: var(--muted);
+  width: 36px;
+  transition: color 0.15s;
+}
+.song-title {
+  padding: 12px 12px;
+  color: var(--text);
+}
+.song-artist {
+  padding: 12px 12px;
+  color: var(--muted);
+  font-size: 13px;
 }
